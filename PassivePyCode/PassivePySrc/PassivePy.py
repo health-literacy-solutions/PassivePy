@@ -235,19 +235,17 @@ class PassivePyAnalyzer:
 
             """"
             finds matches and checks for overlaps
+            EDITED: return spans instead of strings, so we can obtain other data like start and end indices
             """
 
-            final_matches_i = []
             if truncated_passive: matches_i = self.matcher_t(doc)
             elif full_passive: matches_i = self.matcher_f(doc)
             else: matches_i = self.matcher(doc)
 
             if matches_i:
                 spans = [doc[s:e] for id_, s,e in matches_i]
-
-                for span in spacy.util.filter_spans(spans):
-                    final_matches_i.append(str(span))
-            return final_matches_i
+                return spacy.util.filter_spans(spans)
+            return []
 
 
         def _find_matches(self, sentences, batch_size, n_process,
@@ -375,7 +373,9 @@ class PassivePyAnalyzer:
             document = df.loc[:, column_name].values.tolist()
 
             # seperating sentences
-            count_sents, all_sentences = self._detect_sents(document, batch_size, n_process)
+            # count_sents, all_sentences = self._detect_sents(document, batch_size, n_process)
+            ### EDITED: treat the entire document as one sentence
+            count_sents, all_sentences = np.array([1], dtype='object'), np.array(document, dtype='object')
 
             # create a df of matches -------------------------------------------
             output_dict = self._find_matches(
