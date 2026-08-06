@@ -252,7 +252,7 @@ class PassivePyAnalyzer:
          truncated_passive=False, full_passive=False) -> dict:
 
             """ finds matches from each record """
-            print(colored('Starting to find passives...', 'green'))  
+            # print(colored('Starting to find passives...', 'green'))
 
             # defining the parameters ---------------------------------------
             # all passives parameters
